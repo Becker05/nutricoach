@@ -205,7 +205,8 @@ function pesoAtual(a){
 function calcMetas(a){
   const p = a.perfil, cfg = a.config;
   const peso = pesoAtual(a);
-  const tmb = tmbMifflin(Object.assign({}, p, {peso}));
+  let altura = +p.altura; if(altura>0 && altura<3) altura*=100; // aceita altura em metros (1,75 → 175)
+  const tmb = tmbMifflin(Object.assign({}, p, {peso, altura}));
   const fator = (NAF[cfg.atividade]||NAF.moderado).f;
   const get = Math.round(tmb * fator);
   let calorias;
@@ -574,6 +575,7 @@ function collectStep(){
   try{
     if(step===0){
       d.perfil.nome=q('#f-nome').value.trim(); d.perfil.idade=+q('#f-idade').value; d.perfil.altura=+q('#f-altura').value; d.perfil.peso=+q('#f-peso').value; d.perfil.sexo=segVal('sexo')||d.perfil.sexo;
+      if(d.perfil.altura>0 && d.perfil.altura<3) d.perfil.altura=Math.round(d.perfil.altura*100); // 1,75 → 175
       if(!d.perfil.nome){alert('Informe o nome.');return false;}
       if(!(d.perfil.idade>0&&d.perfil.altura>0&&d.perfil.peso>0)){alert('Preencha idade, altura e peso.');return false;}
     } else if(step===1){ d.objetivo=segVal('objetivo')||d.objetivo; d.perfil.pesoMeta=+q('#f-pesometa').value||''; }
