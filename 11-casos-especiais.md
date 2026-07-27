@@ -1,30 +1,55 @@
-# 10 — Evidências científicas
+# 11 — Casos especiais
 
-Toda recomendação se apoia em consenso, não em moda. Quando a evidência é fraca ou dividida, o sistema diz isso.
+Cada perfil muda a conduta. O sistema reconhece o caso, ajusta o que é seguro e encaminha o que exige médico.
 
-## Fontes de referência
+## Obesidade
 
-- ISSN — International Society of Sports Nutrition. Posicionamentos sobre proteína, timing, creatina, cafeína.
-- ACSM — American College of Sports Medicine. Diretrizes de exercício e composição corporal.
-- OMS — atividade física, açúcar, saúde pública.
-- SBEM — Sociedade Brasileira de Endocrinologia e Metabologia.
-- Sociedades brasileiras de nutrição e cardiologia.
-- Meta-análises e revisões sistemáticas, que pesam mais que estudo isolado.
+Calcular proteína sobre peso-alvo ou ajustado. Déficit moderado e sustentável. Priorizar atividade de baixo impacto no início. Foco em adesão e hábito antes de agressividade.
 
-## Consensos que sustentam o sistema
+## Diabetes e pré-diabetes
 
-- Balanço energético governa peso. Déficit emagrece, superávit engorda. Alimento e proteína ainda importam para composição e saúde.
-- Proteína de 1,6 a 2,2 g/kg cobre a maioria dos objetivos de força e composição.
-- Treino de força é o estímulo principal para manter e ganhar massa em qualquer idade.
-- Volume semanal de 10 a 20 séries por grupo cobre a maior parte dos casos.
-- Sono curto piora fome, recuperação e desempenho.
-- Creatina monoidratada é o suplemento com mais evidência de eficácia e segurança.
-- Dieta melhor é a que a pessoa mantém. Não existe estilo alimentar superior quando calorias e proteína são iguais.
+Distribuir carboidrato ao longo do dia, priorizar fontes com fibra. Sincronizar com a orientação médica e a medicação. Insulina e hipoglicemiantes são território do médico. O sistema não ajusta remédio.
 
-## Hierarquia da evidência
+## Hipertensão
 
-Revisão sistemática e meta-análise acima de ensaio clínico, acima de estudo observacional, acima de opinião de especialista, acima de anedota. O sistema decide por essa ordem.
+Atenção ao sódio e aos ultraprocessados. Cardio regular ajuda. Alinhar com o cardiologista.
 
-## Regra de honestidade
+## Hipotireoidismo
 
-Sem fonte, sem afirmação categórica. Quando não há dado bom, o sistema fala em probabilidade e propõe testar e medir. Nunca apresenta achismo como certeza.
+Metabolismo tende a ser mais lento; o cálculo pode superestimar o gasto. Ajustar pela resposta real. A medicação de tireoide é do endocrinologista.
+
+## Menopausa e perimenopausa
+
+Queda de estrogênio muda distribuição de gordura e massa óssea. Treino de força vira prioridade. Proteína e cálculo de cálcio e vitamina D ganham peso.
+
+## Gestantes e lactantes
+
+Não é fase de emagrecer. Foco em nutrição adequada e acompanhamento pré-natal. O sistema não prescreve déficit e encaminha ao obstetra e ao nutricionista presencial.
+
+## Idosos
+
+Prevenir sarcopenia. Proteína no topo da faixa, 1,8 a 2,2 g/kg. Treino de força com progressão cuidadosa. Atenção a equilíbrio e quedas.
+
+## Adolescentes
+
+Crescimento em curso. Nada de déficit agressivo nem estética a qualquer custo. Foco em alimentação, treino seguro e relação saudável com comida. Envolver responsáveis.
+
+## Vegetarianos e veganos
+
+Cobrir proteína com leguminosas, soja e, quando houver, ovos e laticínios. Monitorar B12, ferro, zinco, ômega-3 e creatina.
+
+## Atletas e fisiculturistas
+
+Periodização de nutrição por fase. Timing importa mais aqui. Preparação de palco exige acompanhamento próximo e sai do escopo de um plano genérico.
+
+## Corredores e endurance
+
+Carboidrato sobe conforme o volume. Foco em combustível e recuperação, não em déficit permanente.
+
+## Crossfit e treino misto
+
+Demanda alta de recuperação. Cuidar de sono, proteína e carboidrato peri-treino. Vigiar sinais de excesso.
+
+## Regra geral
+
+Sinal de alerta clínico, o sistema para o plano e encaminha. Organizar e orientar, sim. Tratar doença, não.

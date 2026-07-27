@@ -58,7 +58,7 @@ Abra o endereço no navegador do celular e use "Adicionar à tela de início". O
 2. **Resumo**: calorias, proteína, carbo, gordura, água e fibra, mais a projeção de prazo até o peso-alvo. Ajuste déficit, proteína e gordura se quiser.
 3. **Dieta**: refeições coerentes com os gramas já calculados. Troque qualquer alimento nos menus e os gramas recalculam para bater a meta da refeição. Traz também os suplementos sugeridos e um cadastro de alimentos seus.
 4. **Dia**: registre cada refeição do dia. Se comer diferente da meta, as refeições seguintes recalculam sozinhas para o dia fechar.
-5. **Treino**: ficha com séries, repetições, descanso entre séries, cadência e volume semanal por grupo, evitando exercícios de risco pelas lesões.
+5. **Treino**: escolha o treino do dia e registre cada série — peso, repetições e o ✓ de executada (estilo Hevy). O peso e as reps já vêm preenchidos da última vez. Ao concluir, a sessão vai para o histórico e você acompanha a progressão de carga. A ficha de referência (séries, reps, descanso, cadência e volume semanal) fica logo abaixo.
 6. **Check-in**: peso, sono, treino e demais campos, todo dia.
 7. **Evolução**: gráfico de peso com média de 7 dias, tendência de 30 dias e a análise automática de ajustes.
 8. **Dados → Exportar aluno**: baixe o `.json` de backup. Faça isso com frequência.

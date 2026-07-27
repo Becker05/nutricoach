@@ -1,7 +1,7 @@
 /* Service worker — cache simples para funcionar offline no celular */
-const CACHE = 'nutricoach-v2';
+const CACHE = 'nutricoach-v3';
 const ASSETS = [
-  './', './index.html', './styles.css', './app.js', './data.js', './manifest.json',
+  './', './index.html', './styles.css', './app.js', './manifest.json',
   './icon-192.png', './icon-512.png',
   './conhecimento/01-persona.md','./conhecimento/02-fluxo-de-atendimento.md',
   './conhecimento/03-anamnese.md','./conhecimento/04-nutricao.md',
