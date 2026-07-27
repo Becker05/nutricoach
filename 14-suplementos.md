@@ -1,31 +1,39 @@
-# 14 — Suplementos
+# 13 — Sistema de evolução
 
-Suplemento é ferramenta opcional. Comida vem primeiro, treino e sono vêm antes de qualquer pó. O sistema pergunta o que a pessoa usa ou quer usar e sugere só o que tem respaldo, sempre com a dose e a ressalva.
+O diferencial do projeto. O sistema não é gerador de dieta. É um profissional que acompanha uma pessoa por meses e decide com base em histórico, não em fatos isolados.
 
-## Creatina monoidratada
+## O que registra e compara ao longo do tempo
 
-Dose de 3 a 5 g por dia, todos os dias, horário indiferente. Não precisa de fase de saturação. É o suplemento com mais evidência de eficácia e segurança para força e ganho de massa, útil em qualquer objetivo, inclusive no emagrecimento para preservar massa magra. Beber água ao longo do dia.
+- Peso: valor diário, média móvel de 7 dias e tendência de 30 dias.
+- Medidas corporais e percentual de gordura.
+- Fotos de evolução (frente, costas, perfil) e comparação visual entre datas.
+- Cargas nos exercícios.
+- Volume semanal de treino.
+- Frequência de treino.
+- Passos diários.
+- Horas e qualidade de sono.
+- Estresse, humor, energia e fome.
+- Aderência à dieta e ao treino, em percentual.
+- Exames laboratoriais ao longo do tempo.
 
-## Whey ou proteína vegana
+## Padrões que o sistema identifica antes do aluno perceber
 
-Serve para fechar a meta de proteína quando a comida não alcança. Não é obrigatório: se a alimentação atinge a proteína do dia, não é necessário. Versão vegana (soja, ervilha, arroz) para quem não usa leite ou é intolerante.
+- Estagnação de peso apesar de aderência alta. Sinal para revisar gasto ou calorias.
+- Queda de desempenho ao longo de semanas. Sinal de recuperação insuficiente.
+- Fome crescente. Sinal de que a dieta precisa de ajuste, não de mais força de vontade.
+- Baixa adesão sempre no mesmo horário ou refeição. O plano falha ali, não a pessoa.
+- Tendência positiva consistente. Sinal para manter e não mexer no que funciona.
 
-## Cafeína / pré-treino
+## Como decide
 
-Dose de 3 a 6 mg por kg, 30 a 45 min antes do treino. Melhora desempenho, foco e percepção de esforço. Evitar perto do horário de dormir e em quem tem sensibilidade, arritmia ou hipertensão não controlada.
+O sistema cruza séries temporais, não olha o último número. Peso de ontem não muda nada. Média de 7 dias em queda por 3 semanas muda. A decisão sai do encontro de vários sinais: peso, aderência, sono, energia e força juntos.
 
-## Ômega-3 (EPA + DHA)
+## Média móvel e tendência
 
-Dose de 1 a 2 g por dia. Apoio cardiovascular e anti-inflamatório, mais relevante para quem come pouco peixe.
+- Média móvel de 7 dias: suaviza a oscilação diária de água e intestino.
+- Tendência de 30 dias: mostra a direção real, em kg por semana.
+- A leitura correta compara média com média, nunca dia com dia.
 
-## Vitamina D
+## Arquitetura modular
 
-Só suplementar com exame de 25(OH)D baixo. A dose depende do resultado e é definida com orientação médica. Não chutar a dose nem usar preventivamente sem exame.
-
-## O que o sistema não recomenda
-
-Termogênico como atalho de emagrecimento, "queimador de gordura", BCAA para quem já bate a proteína, e qualquer suplemento vendido pela promessa e não pela evidência. Anabolizante é assunto médico e sai do escopo.
-
-## Regra
-
-Suplemento entra depois que dieta, treino e sono estão de pé. Sugerir na dose certa, explicar o porquê, e deixar claro que a base é a comida.
+Cada módulo é um arquivo. Protocolo novo entra como bloco novo, sem reescrever o resto. Regra que muda, muda em um arquivo só. É o que torna o projeto escalável e fácil de manter.

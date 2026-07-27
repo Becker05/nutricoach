@@ -1,77 +1,82 @@
-# 06 — Banco de exercícios
+# 05 — Treino
 
-Referência de exercícios por grupo. Cada um traz grupo, equipamento, execução, erro comum, alternativas e contraindicação. O app usa uma versão desta lista para montar treinos e para filtrar exercícios de risco por lesão.
+Montar ficha é o final. Antes disso vêm os princípios que fazem a ficha funcionar.
 
-Como expandir: siga o mesmo padrão de campos ao adicionar exercícios novos.
+## Volume semanal
 
-## Peito
+Séries efetivas por grupo muscular por semana, faixa de 10 a 20:
 
-**Supino reto com barra** — peito, ombro, tríceps. Barra e banco. Escápulas retraídas, descida controlada até o peito, cotovelos a cerca de 45°. Erro comuns: abrir demais o cotovelo, quicar a barra no peito. Alternativas: supino com halteres, supino na máquina. Contraindicação: dor de ombro ativa.
+- Iniciante: 10 a 12.
+- Intermediário: 12 a 16.
+- Avançado: 16 a 20.
 
-**Supino inclinado com halteres** — porção superior do peito. Banco a 30°. Alternativa: crucifixo inclinado.
+Mais que 20 raramente rende mais e atrapalha a recuperação.
 
-**Flexão de braço** — peito, sem equipamento. Corpo em linha, desça o peito até perto do chão. Regressão: joelhos apoiados. Progressão: pés elevados.
+## Frequência
 
-**Crucifixo na máquina (peck deck)** — isolador de peito. Evitar amplitude extrema com ombro sensível.
+Cada grupo 2x por semana rende mais que 1x com o mesmo volume. A divisão sai da frequência possível:
 
-## Costas
+- 2 dias: full body.
+- 3 dias: full body ou push/pull/legs adaptado.
+- 4 dias: superior/inferior 2x.
+- 5 a 6 dias: push/pull/legs ou upper/lower combinados.
 
-**Puxada frente na polia** — dorsais. Peito aberto, puxe até o alto do peito, sem jogar o tronco. Alternativa: barra fixa assistida.
+## Intensidade: RIR e RPE
 
-**Remada curvada com barra** — dorsais e lombar estabilizadora. Tronco inclinado, coluna neutra. Erro: arredondar a lombar. Contraindicação: dor lombar.
+- RIR (repetições na reserva): quantas repetições sobrariam. Treino produtivo fica entre RIR 0 e 3.
+- RPE (percepção de esforço): escala de 6 a 10. RPE 8 equivale a RIR 2.
+- Iniciante trabalha com RIR 2 a 3, longe da falha, para aprender a técnica.
+- Avançado usa RIR 0 a 2 em exercícios seguros.
 
-**Remada unilateral com halter** — dorsais, um lado por vez. Apoio no banco. Boa para corrigir assimetria.
+## Falha
 
-**Barra fixa** — dorsais, peso corporal. Regressão: assistida com elástico.
+Falha total é ferramenta, não regra. Usar em isoladores e máquinas, com parcimônia. Evitar em levantamento terra e agachamento pesado pelo risco.
 
-## Ombro
+## Progressão
 
-**Desenvolvimento com halteres** — deltoide. Não trave o cotovelo no topo. Contraindicação: dor de ombro.
+Sobrecarga progressiva é o motor. Subir carga ou repetição quando bater o topo da faixa em todas as séries com técnica mantida. Registrar cargas todo treino para enxergar a evolução.
 
-**Elevação lateral** — deltoide medial. Suba até a linha do ombro, sem embalo.
+## Periodização
 
-## Braços
+Organizar o treino em blocos ao longo das semanas: acumular volume, intensificar, depois descarregar. Iniciante evolui com progressão linear simples. Avançado precisa de ondulação.
 
-**Rosca direta com barra** — bíceps. Cotovelo fixo ao lado do corpo.
+## Deload
 
-**Rosca alternada com halteres** — bíceps, com leve supinação.
-
-**Tríceps na polia (corda)** — tríceps. Cotovelo colado, abra a corda no fim.
-
-**Tríceps testa com halteres** — tríceps. Contraindicação: dor de cotovelo.
-
-## Pernas
-
-**Agachamento livre** — quadríceps, glúteo, posterior. Pés na largura do ombro, desça com coluna neutra, joelho na direção do pé. Contraindicação: dor de joelho ou lombar. Alternativa: agachamento no smith, leg press.
-
-**Leg press 45°** — quadríceps e glúteo. Não deixe a lombar descolar do apoio.
-
-**Cadeira extensora** — isolador de quadríceps. Contraindicação: dor patelar aguda.
-
-**Levantamento terra romeno** — posterior e glúteo. Quadril para trás, coluna neutra, barra rente à perna. Contraindicação: dor lombar.
-
-**Mesa flexora** — isolador de posterior.
-
-**Elevação pélvica (hip thrust)** — glúteo. Queixo levemente para dentro, extensão completa do quadril.
-
-**Afundo com halteres** — glúteo e quadríceps. Contraindicação: instabilidade de joelho.
-
-**Panturrilha em pé** — panturrilha. Amplitude completa, pausa embaixo.
-
-## Core
-
-**Prancha abdominal** — core isométrico. Quadril alinhado, sem afundar a lombar.
-
-**Abdominal supra no solo** — reto abdominal. Contraindicação relativa: dor lombar.
+A cada 6 a 8 semanas, ou quando a recuperação cai: reduzir cerca de 40% do volume por uma semana, mantendo a técnica. Não é semana perdida, é o que permite continuar.
 
 ## Cardio
 
-**Caminhada rápida ou esteira** — LISS. Inclinação ajuda o gasto.
-**Bicicleta ergométrica** — LISS, baixo impacto. Boa para quem tem restrição de joelho.
+- LISS: baixa intensidade, contínuo. 30 a 45 min. Bom para gasto e recuperação.
+- HIIT: alta intensidade intervalado. 10 a 20 min. Rende gasto em menos tempo, cansa mais o sistema.
+- No cutting: LISS 3 a 4x ou HIIT 2x, longe das pernas pesadas.
+- Fora do cutting: 2x por semana para saúde cardiovascular.
 
-## Exercícios a evitar por lesão
+## Recuperação, mobilidade e alongamento
 
-- Ombro: supino reto pesado, desenvolvimento acima da cabeça, crucifixo em amplitude extrema.
-- Lombar: remada curvada livre, terra convencional pesado, abdominal com tronco solto.
-- Joelho: agachamento profundo com carga alta, extensora em amplitude total, afundo.
-- Cotovelo: tríceps testa, rosca pesada com barra reta.
+Músculo cresce no descanso. Sono e proteína recuperam mais que qualquer técnica. Mobilidade antes do treino prepara a articulação. Alongamento não previne lesão sozinho, mas ajuda amplitude e sensação.
+
+## Diferenças de contexto
+
+- Iniciante: aprender padrões, full body, progressão linear, pouca variação.
+- Avançado: mais volume, mais variação, periodização, atenção fina à recuperação.
+- Treino feminino e masculino usam os mesmos princípios. A diferença está em preferência de foco e volume por grupo, não em fisiologia separada. Mulheres toleram e recuperam bem de volume maior em membros inferiores.
+
+## Descanso entre séries
+
+O intervalo muda com o objetivo e o tipo de exercício.
+
+| Objetivo | Composto pesado | Isolador |
+|---|---|---|
+| Hipertrofia | 90–120 s | 60–90 s |
+| Emagrecimento | 60–90 s | 45–60 s |
+| Força / manutenção | 2–3 min | 60–90 s |
+
+Composto pesado (agachamento, terra, supino, remada, desenvolvimento) pede mais descanso, por segurança e para manter a carga. Isolador (rosca, elevação lateral, extensora, panturrilha) recupera rápido. Descanso curto demais em exercício pesado derruba a carga e a qualidade da série; longo demais em isolador só alonga o treino.
+
+## Cadência de execução
+
+Controle a fase de descida (excêntrica) em 2 a 3 segundos e suba com força, sem deixar a carga cair. Amplitude completa. Cadência controlada aumenta o tempo sob tensão e a segurança, e é o que separa treino que estimula de peso que só balança.
+
+## Meta de peso e prazo
+
+Defina o peso-alvo com a pessoa e trabalhe com ritmo saudável: perda de 0,5 a 1% do peso por semana em emagrecimento, ganho de 0,25 a 0,5% por semana em hipertrofia. A partir daí dá para estimar o prazo. A estimativa orienta a expectativa; a resposta real ao longo das semanas manda no ajuste.

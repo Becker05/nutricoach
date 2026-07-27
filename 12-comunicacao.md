@@ -1,35 +1,55 @@
-# 12 — Comunicação
+# 11 — Casos especiais
 
-Como o sistema conversa com o aluno.
+Cada perfil muda a conduta. O sistema reconhece o caso, ajusta o que é seguro e encaminha o que exige médico.
 
-## Sempre
+## Obesidade
 
-- Explicar o porquê de cada orientação.
-- Perguntar antes de concluir.
-- Adaptar a linguagem ao nível da pessoa.
-- Motivar pelo que já foi feito.
-- Reconhecer esforço, mesmo quando o resultado ainda não veio.
+Calcular proteína sobre peso-alvo ou ajustado. Déficit moderado e sustentável. Priorizar atividade de baixo impacto no início. Foco em adesão e hábito antes de agressividade.
 
-## Nunca
+## Diabetes e pré-diabetes
 
-- Julgar escolhas alimentares.
-- Assustar com números ou riscos exagerados.
-- Humilhar por peso, aparência ou recaída.
-- Responder no automático, com texto pronto.
-- Prometer o que não pode entregar.
+Distribuir carboidrato ao longo do dia, priorizar fontes com fibra. Sincronizar com a orientação médica e a medicação. Insulina e hipoglicemiantes são território do médico. O sistema não ajusta remédio.
 
-## Diante de recaída
+## Hipertensão
 
-A pessoa que furou a dieta ou sumiu do treino não precisa de sermão. Precisa de um caminho de volta. Acolher, entender o que aconteceu, ajustar o plano para caber na vida dela.
+Atenção ao sódio e aos ultraprocessados. Cardio regular ajuda. Alinhar com o cardiologista.
 
-## Diante de resultado
+## Hipotireoidismo
 
-Comemorar sem exagero. Mostrar o dado que mudou. Apontar o próximo passo.
+Metabolismo tende a ser mais lento; o cálculo pode superestimar o gasto. Ajustar pela resposta real. A medicação de tireoide é do endocrinologista.
 
-## Tom
+## Menopausa e perimenopausa
 
-Claro e humano. Técnico quando a pessoa quer entender, simples quando ela só quer saber o que fazer. Frase curta quando a mensagem é importante.
+Queda de estrogênio muda distribuição de gordura e massa óssea. Treino de força vira prioridade. Proteína e cálculo de cálcio e vitamina D ganham peso.
 
-## Cuidado com saúde mental
+## Gestantes e lactantes
 
-Se aparecer sinal de relação doente com comida, compulsão frequente, restrição extrema ou fala de autoagressão, o sistema não reforça o comportamento. Acolhe e sugere apoio profissional adequado.
+Não é fase de emagrecer. Foco em nutrição adequada e acompanhamento pré-natal. O sistema não prescreve déficit e encaminha ao obstetra e ao nutricionista presencial.
+
+## Idosos
+
+Prevenir sarcopenia. Proteína no topo da faixa, 1,8 a 2,2 g/kg. Treino de força com progressão cuidadosa. Atenção a equilíbrio e quedas.
+
+## Adolescentes
+
+Crescimento em curso. Nada de déficit agressivo nem estética a qualquer custo. Foco em alimentação, treino seguro e relação saudável com comida. Envolver responsáveis.
+
+## Vegetarianos e veganos
+
+Cobrir proteína com leguminosas, soja e, quando houver, ovos e laticínios. Monitorar B12, ferro, zinco, ômega-3 e creatina.
+
+## Atletas e fisiculturistas
+
+Periodização de nutrição por fase. Timing importa mais aqui. Preparação de palco exige acompanhamento próximo e sai do escopo de um plano genérico.
+
+## Corredores e endurance
+
+Carboidrato sobe conforme o volume. Foco em combustível e recuperação, não em déficit permanente.
+
+## Crossfit e treino misto
+
+Demanda alta de recuperação. Cuidar de sono, proteína e carboidrato peri-treino. Vigiar sinais de excesso.
+
+## Regra geral
+
+Sinal de alerta clínico, o sistema para o plano e encaminha. Organizar e orientar, sim. Tratar doença, não.

@@ -1,82 +1,89 @@
-# 05 — Treino
+# 04 — Nutrição
 
-Montar ficha é o final. Antes disso vêm os princípios que fazem a ficha funcionar.
+Toda a lógica de cálculo e de protocolo. Os números batem com o que o app calcula.
 
-## Volume semanal
+## Passo 1 — Taxa metabólica basal (TMB)
 
-Séries efetivas por grupo muscular por semana, faixa de 10 a 20:
+Fórmula de Mifflin-St Jeor, a mais precisa para a população geral:
 
-- Iniciante: 10 a 12.
-- Intermediário: 12 a 16.
-- Avançado: 16 a 20.
+- Homens: `10 × peso(kg) + 6,25 × altura(cm) − 5 × idade + 5`
+- Mulheres: `10 × peso(kg) + 6,25 × altura(cm) − 5 × idade − 161`
 
-Mais que 20 raramente rende mais e atrapalha a recuperação.
+## Passo 2 — Gasto energético total (GET)
 
-## Frequência
+`GET = TMB × fator de atividade`
 
-Cada grupo 2x por semana rende mais que 1x com o mesmo volume. A divisão sai da frequência possível:
+| Nível | Fator |
+|---|---|
+| Sedentário | 1,2 |
+| Leve (1–3x/sem) | 1,375 |
+| Moderado (3–5x/sem) | 1,55 |
+| Intenso (6–7x/sem) | 1,725 |
+| Muito intenso | 1,9 |
 
-- 2 dias: full body.
-- 3 dias: full body ou push/pull/legs adaptado.
-- 4 dias: superior/inferior 2x.
-- 5 a 6 dias: push/pull/legs ou upper/lower combinados.
+O fator considera treino e movimento diário. Passos e profissão ajudam a escolher.
 
-## Intensidade: RIR e RPE
+## Passo 3 — Calorias-alvo
 
-- RIR (repetições na reserva): quantas repetições sobrariam. Treino produtivo fica entre RIR 0 e 3.
-- RPE (percepção de esforço): escala de 6 a 10. RPE 8 equivale a RIR 2.
-- Iniciante trabalha com RIR 2 a 3, longe da falha, para aprender a técnica.
-- Avançado usa RIR 0 a 2 em exercícios seguros.
+- Emagrecimento: déficit de 15 a 25% sobre o GET. Padrão 20%. Perda-alvo de 0,5 a 1% do peso por semana.
+- Manutenção: igual ao GET.
+- Hipertrofia: superávit de 5 a 15%. Padrão 10%. Ganho-alvo de 0,25 a 0,5% do peso por semana em iniciantes; menos em avançados.
 
-## Falha
+Piso de segurança: as calorias não descem abaixo da TMB. Déficit maior que 25% custa massa magra, força e adesão.
 
-Falha total é ferramenta, não regra. Usar em isoladores e máquinas, com parcimônia. Evitar em levantamento terra e agachamento pesado pelo risco.
+## Passo 4 — Proteína
 
-## Progressão
+1,6 a 2,2 g por kg de peso. Padrão:
 
-Sobrecarga progressiva é o motor. Subir carga ou repetição quando bater o topo da faixa em todas as séries com técnica mantida. Registrar cargas todo treino para enxergar a evolução.
+- Cutting: 2,0 a 2,2 g/kg (preserva massa em déficit).
+- Bulking: 1,6 a 1,8 g/kg.
+- Manutenção: 1,8 g/kg.
 
-## Periodização
+Em obesidade, calcular sobre peso-alvo ou peso ajustado, não sobre o peso total.
 
-Organizar o treino em blocos ao longo das semanas: acumular volume, intensificar, depois descarregar. Iniciante evolui com progressão linear simples. Avançado precisa de ondulação.
+## Passo 5 — Gordura
 
-## Deload
+0,6 a 1,0 g por kg. Padrão 0,8. Piso de 0,6 g/kg para função hormonal. Fontes: azeite, castanhas, abacate, peixe, ovo.
 
-A cada 6 a 8 semanas, ou quando a recuperação cai: reduzir cerca de 40% do volume por uma semana, mantendo a técnica. Não é semana perdida, é o que permite continuar.
+## Passo 6 — Carboidrato
 
-## Cardio
+O que sobra das calorias depois de proteína e gordura:
 
-- LISS: baixa intensidade, contínuo. 30 a 45 min. Bom para gasto e recuperação.
-- HIIT: alta intensidade intervalado. 10 a 20 min. Rende gasto em menos tempo, cansa mais o sistema.
-- No cutting: LISS 3 a 4x ou HIIT 2x, longe das pernas pesadas.
-- Fora do cutting: 2x por semana para saúde cardiovascular.
+`carbo(g) = (calorias − proteína×4 − gordura×9) ÷ 4`
 
-## Recuperação, mobilidade e alongamento
+Carboidrato é o combustível do treino. Corta por último.
 
-Músculo cresce no descanso. Sono e proteína recuperam mais que qualquer técnica. Mobilidade antes do treino prepara a articulação. Alongamento não previne lesão sozinho, mas ajuda amplitude e sensação.
+## Passo 7 — Água e fibra
 
-## Diferenças de contexto
+- Água: 35 ml por kg como base. Sobe com calor e treino intenso.
+- Fibra: 14 g por 1000 kcal. Ajuda saciedade e intestino.
 
-- Iniciante: aprender padrões, full body, progressão linear, pouca variação.
-- Avançado: mais volume, mais variação, periodização, atenção fina à recuperação.
-- Treino feminino e masculino usam os mesmos princípios. A diferença está em preferência de foco e volume por grupo, não em fisiologia separada. Mulheres toleram e recuperam bem de volume maior em membros inferiores.
+## Timing nutricional
 
-## Descanso entre séries
+O total do dia manda mais que o horário. Ainda assim:
 
-O intervalo muda com o objetivo e o tipo de exercício.
+- Pré-treino: refeição com carboidrato 1 a 3 h antes. Sustenta o treino.
+- Pós-treino: proteína e carboidrato na refeição seguinte. A janela é de horas, não de minutos.
+- Proteína distribuída em 3 a 5 refeições, 0,3 a 0,4 g/kg por refeição, melhora a síntese.
 
-| Objetivo | Composto pesado | Isolador |
-|---|---|---|
-| Hipertrofia | 90–120 s | 60–90 s |
-| Emagrecimento | 60–90 s | 45–60 s |
-| Força / manutenção | 2–3 min | 60–90 s |
+## Protocolos e quando usar
 
-Composto pesado (agachamento, terra, supino, remada, desenvolvimento) pede mais descanso, por segurança e para manter a carga. Isolador (rosca, elevação lateral, extensora, panturrilha) recupera rápido. Descanso curto demais em exercício pesado derruba a carga e a qualidade da série; longo demais em isolador só alonga o treino.
+- Refeed: 1 a 2 dias com carboidrato na manutenção, dentro de um cutting longo. Repõe glicogênio e alivia a cabeça.
+- Diet break: 1 a 2 semanas em manutenção após 8 a 12 semanas de déficit. Recupera hormônios e adesão.
+- Bulk: superávit controlado para ganho de massa. Limpo, não a qualquer custo.
+- Cut: déficit para perda de gordura com proteína alta e treino de força.
+- Manutenção: fase de estabilizar, criar hábito e proteger o resultado.
 
-## Cadência de execução
+## Estilos alimentares
 
-Controle a fase de descida (excêntrica) em 2 a 3 segundos e suba com força, sem deixar a carga cair. Amplitude completa. Cadência controlada aumenta o tempo sob tensão e a segurança, e é o que separa treino que estimula de peso que só balança.
+Todos funcionam se fecharem calorias e proteína. O melhor é o que a pessoa mantém.
 
-## Meta de peso e prazo
+- Low carb: menos carboidrato, mais gordura. Serve para quem tem fome alta com muito carbo. Não é obrigatório.
+- Cetogênica: carboidrato muito baixo. Nichada, exige acompanhamento. Não é superior para emagrecer se as calorias forem iguais.
+- Mediterrânea: azeite, peixe, vegetais, grãos. Forte para saúde metabólica e longevidade.
+- Vegetariana e vegana: cobrir proteína com leguminosas, soja, ovos e laticínios quando permitidos. Atenção a B12, ferro, ômega-3 e creatina.
+- Jejum intermitente: só reorganiza os horários. Emagrece porque ajuda a comer menos, não por mágica metabólica.
 
-Defina o peso-alvo com a pessoa e trabalhe com ritmo saudável: perda de 0,5 a 1% do peso por semana em emagrecimento, ganho de 0,25 a 0,5% por semana em hipertrofia. A partir daí dá para estimar o prazo. A estimativa orienta a expectativa; a resposta real ao longo das semanas manda no ajuste.
+## O que o sistema não faz
+
+Não prescreve detox, chá que seca, jejum prolongado sem indicação, nem corte de grupos alimentares sem motivo clínico.

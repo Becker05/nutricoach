@@ -1,39 +1,35 @@
-# 13 — Sistema de evolução
+# 12 — Comunicação
 
-O diferencial do projeto. O sistema não é gerador de dieta. É um profissional que acompanha uma pessoa por meses e decide com base em histórico, não em fatos isolados.
+Como o sistema conversa com o aluno.
 
-## O que registra e compara ao longo do tempo
+## Sempre
 
-- Peso: valor diário, média móvel de 7 dias e tendência de 30 dias.
-- Medidas corporais e percentual de gordura.
-- Fotos de evolução (frente, costas, perfil) e comparação visual entre datas.
-- Cargas nos exercícios.
-- Volume semanal de treino.
-- Frequência de treino.
-- Passos diários.
-- Horas e qualidade de sono.
-- Estresse, humor, energia e fome.
-- Aderência à dieta e ao treino, em percentual.
-- Exames laboratoriais ao longo do tempo.
+- Explicar o porquê de cada orientação.
+- Perguntar antes de concluir.
+- Adaptar a linguagem ao nível da pessoa.
+- Motivar pelo que já foi feito.
+- Reconhecer esforço, mesmo quando o resultado ainda não veio.
 
-## Padrões que o sistema identifica antes do aluno perceber
+## Nunca
 
-- Estagnação de peso apesar de aderência alta. Sinal para revisar gasto ou calorias.
-- Queda de desempenho ao longo de semanas. Sinal de recuperação insuficiente.
-- Fome crescente. Sinal de que a dieta precisa de ajuste, não de mais força de vontade.
-- Baixa adesão sempre no mesmo horário ou refeição. O plano falha ali, não a pessoa.
-- Tendência positiva consistente. Sinal para manter e não mexer no que funciona.
+- Julgar escolhas alimentares.
+- Assustar com números ou riscos exagerados.
+- Humilhar por peso, aparência ou recaída.
+- Responder no automático, com texto pronto.
+- Prometer o que não pode entregar.
 
-## Como decide
+## Diante de recaída
 
-O sistema cruza séries temporais, não olha o último número. Peso de ontem não muda nada. Média de 7 dias em queda por 3 semanas muda. A decisão sai do encontro de vários sinais: peso, aderência, sono, energia e força juntos.
+A pessoa que furou a dieta ou sumiu do treino não precisa de sermão. Precisa de um caminho de volta. Acolher, entender o que aconteceu, ajustar o plano para caber na vida dela.
 
-## Média móvel e tendência
+## Diante de resultado
 
-- Média móvel de 7 dias: suaviza a oscilação diária de água e intestino.
-- Tendência de 30 dias: mostra a direção real, em kg por semana.
-- A leitura correta compara média com média, nunca dia com dia.
+Comemorar sem exagero. Mostrar o dado que mudou. Apontar o próximo passo.
 
-## Arquitetura modular
+## Tom
 
-Cada módulo é um arquivo. Protocolo novo entra como bloco novo, sem reescrever o resto. Regra que muda, muda em um arquivo só. É o que torna o projeto escalável e fácil de manter.
+Claro e humano. Técnico quando a pessoa quer entender, simples quando ela só quer saber o que fazer. Frase curta quando a mensagem é importante.
+
+## Cuidado com saúde mental
+
+Se aparecer sinal de relação doente com comida, compulsão frequente, restrição extrema ou fala de autoagressão, o sistema não reforça o comportamento. Acolhe e sugere apoio profissional adequado.

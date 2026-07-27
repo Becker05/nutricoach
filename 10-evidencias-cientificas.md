@@ -1,30 +1,43 @@
-# 10 — Evidências científicas
+# 09 — Diário
 
-Toda recomendação se apoia em consenso, não em moda. Quando a evidência é fraca ou dividida, o sistema diz isso.
+Padrão fixo de registro. Registrar sempre igual permite comparar ao longo do tempo. O app já grava nesse formato; aqui fica o modelo de referência.
 
-## Fontes de referência
+## Diário alimentar
 
-- ISSN — International Society of Sports Nutrition. Posicionamentos sobre proteína, timing, creatina, cafeína.
-- ACSM — American College of Sports Medicine. Diretrizes de exercício e composição corporal.
-- OMS — atividade física, açúcar, saúde pública.
-- SBEM — Sociedade Brasileira de Endocrinologia e Metabologia.
-- Sociedades brasileiras de nutrição e cardiologia.
-- Meta-análises e revisões sistemáticas, que pesam mais que estudo isolado.
+| Campo | Exemplo |
+|---|---|
+| Refeição | Almoço |
+| Horário | 12h30 |
+| Alimento | Arroz, feijão, frango, salada |
+| Quantidade | 150 g arroz, 120 g frango |
+| Proteína | 38 g |
+| Carboidrato | 55 g |
+| Gordura | 9 g |
+| Calorias | 470 kcal |
 
-## Consensos que sustentam o sistema
+## Diário de treino
 
-- Balanço energético governa peso. Déficit emagrece, superávit engorda. Alimento e proteína ainda importam para composição e saúde.
-- Proteína de 1,6 a 2,2 g/kg cobre a maioria dos objetivos de força e composição.
-- Treino de força é o estímulo principal para manter e ganhar massa em qualquer idade.
-- Volume semanal de 10 a 20 séries por grupo cobre a maior parte dos casos.
-- Sono curto piora fome, recuperação e desempenho.
-- Creatina monoidratada é o suplemento com mais evidência de eficácia e segurança.
-- Dieta melhor é a que a pessoa mantém. Não existe estilo alimentar superior quando calorias e proteína são iguais.
+| Campo | Exemplo |
+|---|---|
+| Treino | A (peito e tríceps) |
+| Exercício | Supino reto |
+| Carga | 60 kg |
+| Séries × reps | 4 × 10 |
+| Cardio | Esteira 20 min |
+| Passos | 8200 |
 
-## Hierarquia da evidência
+## Diário de sono e bem-estar
 
-Revisão sistemática e meta-análise acima de ensaio clínico, acima de estudo observacional, acima de opinião de especialista, acima de anedota. O sistema decide por essa ordem.
+| Campo | Exemplo |
+|---|---|
+| Dormiu | 23h40 |
+| Acordou | 6h50 |
+| Qualidade | Boa |
+| Humor (1–5) | 4 |
+| Energia (1–5) | 4 |
+| Ansiedade (1–5) | 2 |
+| Estresse (1–5) | 3 |
 
-## Regra de honestidade
+## Regra
 
-Sem fonte, sem afirmação categórica. Quando não há dado bom, o sistema fala em probabilidade e propõe testar e medir. Nunca apresenta achismo como certeza.
+O sistema registra sempre com a data. Campo em branco é campo em branco, não zero. Isso mantém a média honesta.
