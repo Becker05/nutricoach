@@ -644,154 +644,135 @@ function tabResumo(a, body){
   };
 }
 
-// monta os selects de uma refeição e a tabela de gramas
-function blocoRefeicao(a, slot, target, sel, idPrefix){
-  const pool=filterFoods(a.anamnese.restricoes).filter(f=>f.meals.includes(slot));
-  const opt=(cat,cur)=>{
-    const items=pool.filter(f=>cat==='carb'?(f.cat==='carb'||f.cat==='fruta'):f.cat===cat);
-    if(!items.length) return '';
-    const label={prot:'Proteína',carb:'Carbo',gord:'Gordura',veg:'Vegetais'}[cat];
-    return `<label>${label}</label><select data-sel="${cat}" data-pfx="${idPrefix}">${items.map(f=>`<option value="${esc(f.nome)}" ${cur&&cur.nome===f.nome?'selected':''}>${esc(f.nome)}</option>`).join('')}</select>`;
-  };
-  const calc=calcPorcoes(target, sel);
-  const linhas=calc.itens.map(i=>`<tr><td>${esc(i.nome)}</td><td class="num">${i.grams} g</td><td class="num">${i.kcal}</td></tr>`).join('');
-  return `<div class="row">${opt('prot',sel.prot)}${opt('carb',sel.carb)}</div>
-    <div class="row">${opt('gord',sel.gord)}${slot==='almoco'?opt('veg',sel.veg):''}</div>
-    <table style="margin-top:.5rem"><tr><th>Alimento</th><th class="num">Qtd</th><th class="num">kcal</th></tr>${linhas}</table>
-    <div class="sub" style="margin-top:.3rem">Bate: P ${calc.tot.p}g · C ${calc.tot.c}g · G ${calc.tot.f}g · ${calc.tot.kcal} kcal &nbsp;|&nbsp; meta: P ${Math.round(target.p)} · C ${Math.round(target.c)} · G ${Math.round(target.f)}</div>`;
+/* ---------------------- montador de refeição (livre) --------------------- */
+// alimentos contados em unidades (ovo, frutas, fatias)
+const UNITS={
+  'Ovo inteiro':{un:50,nome:'ovo'}, 'Clara de ovo':{un:33,nome:'clara'},
+  'Pão francês':{un:50,nome:'pão'}, 'Pão integral':{un:25,nome:'fatia'},
+  'Banana':{un:100,nome:'unid.'}, 'Maçã':{un:130,nome:'unid.'}, 'Mamão':{un:150,nome:'fatia'},
+  'Laranja':{un:130,nome:'unid.'}, 'Abacaxi':{un:100,nome:'fatia'}, 'Uva':{un:100,nome:'punhado'}
+};
+const foodByName = n => getFoods().find(f=>f.nome===n);
+const unitInfo   = fo => fo?UNITS[fo.nome]||null:null;
+const roleDe = fo => fo.cat==='prot'?'p':(fo.cat==='carb'||fo.cat==='fruta')?'c':fo.cat==='gord'?'f':'veg';
+
+// sugere gramas para bater os macros, com vários alimentos por macro (divide igual)
+function solverMulti(foods, target){
+  const info=foods.map(it=>({it, fo:foodByName(it.nome)})).filter(x=>x.fo);
+  info.forEach(x=>{ x.role=roleDe(x.fo); if(x.role==='veg') x.it.grams=100; else if(!x.it.grams) x.it.grams=50; });
+  const per=(fo,m)=>(m==='p'?fo.p:m==='c'?fo.c:fo.f)/100;
+  for(let iter=0;iter<10;iter++){
+    ['p','c','f'].forEach(M=>{
+      const grp=info.filter(x=>x.role===M); if(!grp.length) return;
+      let others=0; info.forEach(x=>{ if(x.role!==M) others+=x.it.grams*per(x.fo,M); });
+      const alvo=(M==='p'?target.p:M==='c'?target.c:target.f);
+      const share=Math.max(0, alvo-others)/grp.length;
+      grp.forEach(x=>{ const pg=per(x.fo,M); x.it.grams = pg>0? share/pg : 0; });
+    });
+  }
+  info.forEach(x=>{ const ui=unitInfo(x.fo);
+    x.it.grams = ui ? Math.max(ui.un, Math.round(x.it.grams/ui.un)*ui.un) : Math.max(0, Math.round(x.it.grams/5)*5); });
 }
 
-// estado transitório dos selects (por refeição)
-let selState={};
-function tabDieta(a, body){
-  const m=calcMetas(a);
-  const slots=mealSlots(a.config.refeicoes);
-  selState={};
-  const blocos=slots.map((s,i)=>{
-    const target={p:m.proteinaG*s.dist, c:m.carboG*s.dist, f:m.gorduraG*s.dist, kcal:m.calorias*s.dist};
-    const sel=selecaoPadrao(s.slot, a.anamnese.restricoes);
-    selState['d'+i]={slot:s.slot,target,sel};
-    return `<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4><span class="pill">${Math.round(target.kcal)} kcal</span></div>
-      <div id="d${i}">${blocoRefeicao(a,s.slot,target,sel,'d'+i)}</div></div>`;
+const MC={}; // estado dos montadores: MC[cid] = {foods:[{nome,grams}]}
+function totaisMC(foods){ let t={p:0,c:0,f:0,kcal:0}; foods.forEach(it=>{ const fo=foodByName(it.nome); if(!fo)return; const g=it.grams/100; t.p+=fo.p*g;t.c+=fo.c*g;t.f+=fo.f*g;t.kcal+=fo.kcal*g; }); return {p:Math.round(t.p),c:Math.round(t.c),f:Math.round(t.f),kcal:Math.round(t.kcal)}; }
+
+function renderComposer(host, a, cid, slot, target, opts){
+  opts=opts||{};
+  const st=MC[cid]; const pool=filterFoods(a.anamnese.restricoes).filter(f=>f.meals.includes(slot));
+  const tot=totaisMC(st.foods);
+  const catPt={prot:'proteína',carb:'carbo',fruta:'fruta',gord:'gordura',veg:'vegetal'};
+  const rows=st.foods.map((it,idx)=>{
+    const fo=foodByName(it.nome); if(!fo) return '';
+    const ui=unitInfo(fo); const g=it.grams/100;
+    const val= ui? +(it.grams/ui.un).toFixed(1) : it.grams;
+    return `<tr>
+      <td>${esc(it.nome)}<div class="sub">${Math.round(fo.p*g)}P ${Math.round(fo.c*g)}C ${Math.round(fo.f*g)}G · ${Math.round(fo.kcal*g)} kcal</div></td>
+      <td style="width:88px"><input type="number" step="${ui?0.5:5}" min="0" data-qty="${idx}" value="${val}" style="padding:.4rem"></td>
+      <td class="sub" style="width:70px">${ui?ui.nome+`<div class="sub">${it.grams} g</div>`:'g'}</td>
+      <td style="width:30px"><button class="linkbtn" data-rm="${idx}">✕</button></td></tr>`;
   }).join('');
-  const supps=suggestSupps(a).map(s=>`<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4>
-     ${s.usa?'<span class="pill good">usa</span>':s.sugerido?'<span class="pill info">sugerido</span>':'<span class="pill">opcional</span>'}</div>
-     <div class="sub"><b>Dose:</b> ${esc(s.dose)}</div><div class="sub">${esc(s.nota)}</div></div>`).join('');
-  body.innerHTML=`
-    <div class="card"><h2>Plano alimentar</h2>
-      <p class="muted" style="margin:.3rem 0 0">Total do dia: ${fmt(m.calorias)} kcal · P ${m.proteinaG}g · C ${m.carboG}g · G ${m.gorduraG}g</p>
-      <p class="field-help">Troque qualquer alimento nos menus — os gramas recalculam sozinhos para bater a meta da refeição.</p></div>
-    ${blocos}
-    <div class="card"><h3>Suplementos</h3><p class="field-help">Opcionais e baseados em evidência. Comida vem primeiro; caso clínico é com médico.</p>${supps}</div>
-    <div class="card"><h3>Alimentos</h3><p class="field-help">A tabela vem pronta. Adicione itens seus (valores por 100 g).</p>
-      <button class="btn secondary small" id="add-food">+ Adicionar alimento</button><div id="food-form"></div></div>
-    <div class="alert"><b>Como usar</b>São alvos por refeição com gramas calculados. Para o registro do dia com recálculo automático, use a aba <b>Dia</b>.</div>`;
-  // troca de alimento -> recalcula bloco
-  body.querySelectorAll('[data-sel]').forEach(selEl=> selEl.onchange=()=>{
-    const pfx=selEl.dataset.pfx, cat=selEl.dataset.sel, st=selState[pfx];
-    const food=getFoods().find(f=>f.nome===selEl.value);
-    st.sel[cat]=food;
-    body.querySelector('#'+pfx).innerHTML=blocoRefeicao(a, st.slot, st.target, st.sel, pfx);
-    // religa handlers do bloco recriado
-    body.querySelectorAll('#'+pfx+' [data-sel]').forEach(e2=> e2.onchange=selEl.onchange);
+  const grupos={prot:[],carb:[],fruta:[],gord:[],veg:[]};
+  pool.forEach(f=>{ (grupos[f.cat]=grupos[f.cat]||[]).push(f); });
+  const addOpts=Object.keys(grupos).filter(k=>grupos[k].length).map(k=>
+    `<optgroup label="${catPt[k]||k}">${grupos[k].map(f=>`<option value="${esc(f.nome)}">${esc(f.nome)}</option>`).join('')}</optgroup>`).join('');
+  const pct=Math.min(100,Math.round(100*tot.kcal/(target.kcal||1)));
+  host.innerHTML=`
+    <table><tr><th>Alimento</th><th>Qtd</th><th></th><th></th></tr>${rows||'<tr><td colspan="4" class="sub">Sem alimentos. Adicione abaixo.</td></tr>'}</table>
+    <div class="row" style="margin-top:.4rem"><select data-add style="flex:2">${addOpts}</select><button class="btn secondary small" data-addbtn style="flex:1">+ adicionar</button></div>
+    <div class="sub" style="margin-top:.4rem">Total: <b>${tot.kcal} kcal</b> · P ${tot.p} · C ${tot.c} · G ${tot.f} &nbsp;|&nbsp; meta ${Math.round(target.kcal)} kcal · P ${Math.round(target.p)} · C ${Math.round(target.c)} · G ${Math.round(target.f)}</div>
+    <div class="stepbar" style="margin-top:.35rem"><div class="on" style="flex:${pct}"></div><div style="flex:${100-pct}"></div></div>
+    <div class="row" style="margin-top:.4rem"><button class="btn secondary small" data-auto>Sugerir quantidades</button>${opts.logBtn?'<button class="btn small" data-log>Registrar</button>':''}</div>`;
+  const rer=()=>renderComposer(host,a,cid,slot,target,opts);
+  host.querySelectorAll('[data-qty]').forEach(inp=> inp.onchange=()=>{ const i=+inp.dataset.qty, fo=foodByName(st.foods[i].nome), ui=unitInfo(fo), v=+inp.value||0; st.foods[i].grams= ui?Math.round(v*ui.un):Math.round(v); rer(); });
+  host.querySelectorAll('[data-rm]').forEach(b=> b.onclick=()=>{ st.foods.splice(+b.dataset.rm,1); rer(); });
+  host.querySelector('[data-addbtn]').onclick=()=>{ const nome=host.querySelector('[data-add]').value, fo=foodByName(nome); if(!fo)return; const ui=unitInfo(fo); st.foods.push({nome, grams: ui?ui.un:(fo.cat==='gord'?10:fo.cat==='veg'?100:50)}); rer(); };
+  host.querySelector('[data-auto]').onclick=()=>{ solverMulti(st.foods, target); rer(); };
+  if(opts.logBtn){ const lb=host.querySelector('[data-log]'); if(lb) lb.onclick=()=>opts.onLog(totaisMC(st.foods), st.foods); }
+}
+function seedComposer(cid, slot, restricoes, target){
+  const sel=selecaoPadrao(slot, restricoes); const foods=[];
+  ['prot','carb','gord','veg'].forEach(k=>{ if(sel[k]){ const ui=unitInfo(sel[k]); foods.push({nome:sel[k].nome, grams: ui?ui.un:(k==='gord'?10:k==='veg'?100:50)}); } });
+  MC[cid]={foods}; solverMulti(MC[cid].foods, target);
+}
+
+function tabDieta(a, body){
+  const m=calcMetas(a); const slots=mealSlots(a.config.refeicoes);
+  const blocos=slots.map((s,i)=>{
+    const target={p:m.proteinaG*s.dist,c:m.carboG*s.dist,f:m.gorduraG*s.dist,kcal:m.calorias*s.dist};
+    const cid='dieta_'+a.id+'_'+i;
+    if(!MC[cid]) seedComposer(cid, s.slot, a.anamnese.restricoes, target);
+    return {cid, slot:s.slot, target, html:`<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4><span class="pill">${Math.round(target.kcal)} kcal</span></div><div id="host-${cid}"></div></div>`};
   });
+  const supps=suggestSupps(a).map(s=>`<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4>${s.usa?'<span class="pill good">usa</span>':s.sugerido?'<span class="pill info">sugerido</span>':'<span class="pill">opcional</span>'}</div><div class="sub"><b>Dose:</b> ${esc(s.dose)}</div><div class="sub">${esc(s.nota)}</div></div>`).join('');
+  body.innerHTML=`
+    <div class="card"><h2>Plano alimentar</h2><p class="muted" style="margin:.3rem 0 0">Total do dia: ${fmt(m.calorias)} kcal · P ${m.proteinaG}g · C ${m.carboG}g · G ${m.gorduraG}g</p>
+      <p class="field-help">Monte cada refeição livre: adicione os alimentos que quiser (várias fontes, frutas, etc.). Ovo e frutas aparecem em unidades. "Sugerir quantidades" ajusta os gramas para bater a meta.</p></div>
+    ${blocos.map(b=>b.html).join('')}
+    <div class="card"><h3>Suplementos</h3><p class="field-help">Opcionais e baseados em evidência. Comida vem primeiro; caso clínico é com médico.</p>${supps}</div>
+    <div class="card"><h3>Alimentos</h3><p class="field-help">A tabela vem pronta. Adicione itens seus (valores por 100 g).</p><button class="btn secondary small" id="add-food">+ Adicionar alimento</button><div id="food-form"></div></div>
+    <div class="alert"><b>Registro do dia</b>Para acompanhar o que foi comido com recálculo automático das refeições seguintes, use a aba <b>Dia</b>.</div>`;
+  blocos.forEach(b=> renderComposer(body.querySelector('#host-'+b.cid), a, b.cid, b.slot, b.target, null));
   body.querySelector('#add-food').onclick=()=>{
     const f=body.querySelector('#food-form');
-    f.innerHTML=`<div class="row"><div><label>Nome</label><input id="nf-n" placeholder="ex: Frango desfiado"></div>
-      <div><label>Categoria</label><select id="nf-cat"><option value="prot">Proteína</option><option value="carb">Carbo</option><option value="gord">Gordura</option><option value="veg">Vegetal</option><option value="fruta">Fruta</option></select></div></div>
-      <div class="row"><div><label>kcal/100g</label><input id="nf-k" type="number"></div><div><label>Prot</label><input id="nf-p" type="number"></div>
-      <div><label>Carbo</label><input id="nf-c" type="number"></div><div><label>Gord</label><input id="nf-f" type="number"></div></div>
+    f.innerHTML=`<div class="row"><div><label>Nome</label><input id="nf-n" placeholder="ex: Frango desfiado"></div><div><label>Categoria</label><select id="nf-cat"><option value="prot">Proteína</option><option value="carb">Carbo</option><option value="gord">Gordura</option><option value="veg">Vegetal</option><option value="fruta">Fruta</option></select></div></div>
+      <div class="row"><div><label>kcal/100g</label><input id="nf-k" type="number"></div><div><label>Prot</label><input id="nf-p" type="number"></div><div><label>Carbo</label><input id="nf-c" type="number"></div><div><label>Gord</label><input id="nf-f" type="number"></div></div>
       <button class="btn small" id="nf-save" style="margin-top:.6rem">Salvar alimento</button>`;
-    f.querySelector('#nf-save').onclick=()=>{
-      const nome=f.querySelector('#nf-n').value.trim(); if(!nome){alert('Nome?');return;}
-      customFoods.add({nome,cat:f.querySelector('#nf-cat').value,kcal:+f.querySelector('#nf-k').value||0,
-        p:+f.querySelector('#nf-p').value||0,c:+f.querySelector('#nf-c').value||0,f:+f.querySelector('#nf-f').value||0,
-        meals:['cafe','lanche','almoco','ceia'],tags:['veg','vgn']});
-      renderAluno(a.id,'dieta');
-    };
+    f.querySelector('#nf-save').onclick=()=>{ const nome=f.querySelector('#nf-n').value.trim(); if(!nome){alert('Nome?');return;}
+      customFoods.add({nome,cat:f.querySelector('#nf-cat').value,kcal:+f.querySelector('#nf-k').value||0,p:+f.querySelector('#nf-p').value||0,c:+f.querySelector('#nf-c').value||0,f:+f.querySelector('#nf-f').value||0,meals:['cafe','lanche','almoco','ceia'],tags:['veg','vgn']});
+      renderAluno(a.id,'dieta'); };
   };
 }
 
 /* --------------------------- DIA (adaptativo) ---------------------------- */
-let diaSel={}; // diaSel[date][idx] = {prot,carb,gord,veg} nomes
 function tabDia(a, body){
-  const m=calcMetas(a);
-  const date=todayISO();
-  const slots=mealSlots(a.config.refeicoes);
-  a.dias=a.dias||{};
-  const log=a.dias[date]||slots.map(()=>null);
-  // consumidos
-  const done={p:0,c:0,f:0,kcal:0};
-  log.forEach(r=>{ if(r){ done.p+=r.p; done.c+=r.c; done.f+=r.f; done.kcal+=r.kcal; } });
-  const restante={p:Math.max(0,m.proteinaG-done.p), c:Math.max(0,m.carboG-done.c), f:Math.max(0,m.gorduraG-done.f), kcal:Math.max(0,m.calorias-done.kcal)};
+  const m=calcMetas(a); const date=todayISO(); const slots=mealSlots(a.config.refeicoes);
+  a.dias=a.dias||{}; const log=a.dias[date]||slots.map(()=>null);
+  const done={p:0,c:0,f:0,kcal:0}; log.forEach(r=>{ if(r){ done.p+=r.p;done.c+=r.c;done.f+=r.f;done.kcal+=r.kcal; } });
+  const restante={p:Math.max(0,m.proteinaG-done.p),c:Math.max(0,m.carboG-done.c),f:Math.max(0,m.gorduraG-done.f),kcal:Math.max(0,m.calorias-done.kcal)};
   const pesoPend=slots.reduce((s,sl,i)=>s+(log[i]?0:sl.dist),0)||1;
-  diaSel[date]=diaSel[date]||{};
-
   const cards=slots.map((s,i)=>{
-    if(log[i]){
-      const r=log[i];
-      return `<div class="block"><div class="spread"><h4>✔ ${esc(s.nome)}</h4><span class="pill good">registrado</span></div>
-        <div class="sub">${esc(r.desc||'')}</div><div class="sub">P ${r.p}g · C ${r.c}g · G ${r.f}g · ${r.kcal} kcal</div>
-        <button class="btn secondary small" data-undo="${i}" style="margin-top:.5rem">Desfazer</button></div>`;
-    }
-    const alvo={p:restante.p*s.dist/pesoPend, c:restante.c*s.dist/pesoPend, f:restante.f*s.dist/pesoPend, kcal:restante.kcal*s.dist/pesoPend};
-    let sel=selecaoPadrao(s.slot, a.anamnese.restricoes);
-    const saved=diaSel[date][i];
-    if(saved){ const g=getFoods(); ['prot','carb','gord','veg'].forEach(c=>{ if(saved[c]){ const f=g.find(x=>x.nome===saved[c]); if(f) sel[c]=f; } }); }
-    selState['x'+date+i]={slot:s.slot,target:alvo,sel};
-    return `<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4><span class="pill">${Math.round(alvo.kcal)} kcal</span></div>
-      <div id="x${i}">${blocoRefeicao(a,s.slot,alvo,sel,'x'+date+i)}</div>
-      <div class="row" style="margin-top:.5rem"><button class="btn small" data-log="${i}">Comi isso</button>
-        <button class="btn secondary small" data-manual="${i}">Registro manual</button></div>
-      <div id="man${i}"></div></div>`;
+    if(log[i]){ const r=log[i]; return `<div class="block"><div class="spread"><h4>✔ ${esc(s.nome)}</h4><span class="pill good">registrado</span></div><div class="sub">${esc(r.desc||'')}</div><div class="sub">P ${r.p}g · C ${r.c}g · G ${r.f}g · ${r.kcal} kcal</div><button class="btn secondary small" data-undo="${i}" style="margin-top:.5rem">Desfazer</button></div>`; }
+    const alvo={p:restante.p*s.dist/pesoPend,c:restante.c*s.dist/pesoPend,f:restante.f*s.dist/pesoPend,kcal:restante.kcal*s.dist/pesoPend};
+    const cid='dia_'+a.id+'_'+date+'_'+i; seedComposer(cid, s.slot, a.anamnese.restricoes, alvo);
+    return `<div class="block"><div class="spread"><h4>${esc(s.nome)}</h4><span class="pill">${Math.round(alvo.kcal)} kcal</span></div><div id="host-${cid}" data-slot="${s.slot}" data-i="${i}"></div></div>`;
   }).join('');
-
-  const pct=v=>Math.min(100,Math.round(100*v));
+  const pct=Math.min(100,Math.round(100*done.kcal/(m.calorias||1)));
   body.innerHTML=`
-    <div class="card"><div class="spread"><h2 style="margin:0">Dia — ${date}</h2>
-      <button class="btn secondary small" id="reset-dia">Zerar dia</button></div>
-      <p class="field-help">Registre cada refeição. Se comer diferente da meta, as refeições seguintes recalculam sozinhas para o dia fechar.</p>
-      <table style="margin-top:.5rem"><tr><th>Consumido / meta</th><th class="num">kcal</th><th class="num">P</th><th class="num">C</th><th class="num">G</th></tr>
-      <tr><td>Hoje</td><td class="num">${done.kcal}/${m.calorias}</td><td class="num">${Math.round(done.p)}/${m.proteinaG}</td><td class="num">${Math.round(done.c)}/${m.carboG}</td><td class="num">${Math.round(done.f)}/${m.gorduraG}</td></tr></table>
-      <div class="stepbar" style="margin-top:.6rem"><div class="on" style="flex:${pct(done.kcal/m.calorias)}"></div><div style="flex:${100-pct(done.kcal/m.calorias)}"></div></div></div>
+    <div class="card"><div class="spread"><h2 style="margin:0">Dia — ${date}</h2><button class="btn secondary small" id="reset-dia">Zerar dia</button></div>
+      <p class="field-help">Monte e registre cada refeição. Se comer diferente da meta, as refeições seguintes recalculam sozinhas.</p>
+      <table style="margin-top:.5rem"><tr><th>Hoje</th><th class="num">kcal</th><th class="num">P</th><th class="num">C</th><th class="num">G</th></tr>
+      <tr><td>consumido / meta</td><td class="num">${done.kcal}/${m.calorias}</td><td class="num">${Math.round(done.p)}/${m.proteinaG}</td><td class="num">${Math.round(done.c)}/${m.carboG}</td><td class="num">${Math.round(done.f)}/${m.gorduraG}</td></tr></table>
+      <div class="stepbar" style="margin-top:.6rem"><div class="on" style="flex:${pct}"></div><div style="flex:${100-pct}"></div></div></div>
     ${cards}`;
-
-  // selects -> recalcula e memoriza
-  const rewire=()=>body.querySelectorAll('[data-sel]').forEach(selEl=> selEl.onchange=()=>{
-    const pfx=selEl.dataset.pfx, cat=selEl.dataset.sel, st=selState[pfx];
-    const idx=pfx.slice((date+'x').length-1); // não confiável; usar mapa
-    const food=getFoods().find(f=>f.nome===selEl.value); st.sel[cat]=food;
-    // memoriza escolha
-    const i=+pfx.replace('x'+date,''); diaSel[date][i]=diaSel[date][i]||{}; diaSel[date][i][cat]=food.nome;
-    const cont=selEl.closest('.block').querySelector('[id^="x"]');
-    cont.innerHTML=blocoRefeicao(a, st.slot, st.target, st.sel, pfx); rewire();
-  });
-  rewire();
-  body.querySelectorAll('[data-log]').forEach(bt=> bt.onclick=()=>{
-    const i=+bt.dataset.log, st=selState['x'+date+i];
-    const calc=calcPorcoes(st.target, st.sel);
-    const desc=calc.itens.map(x=>`${x.nome} ${x.grams}g`).join(', ');
-    salvarRefeicao(a,date,slots,i,{p:calc.tot.p,c:calc.tot.c,f:calc.tot.f,kcal:calc.tot.kcal,desc});
-  });
-  body.querySelectorAll('[data-manual]').forEach(bt=> bt.onclick=()=>{
-    const i=+bt.dataset.manual, cont=body.querySelector('#man'+i);
-    cont.innerHTML=`<div class="row" style="margin-top:.5rem"><div><label>Prot</label><input id="mm-p${i}" type="number"></div>
-      <div><label>Carbo</label><input id="mm-c${i}" type="number"></div><div><label>Gord</label><input id="mm-f${i}" type="number"></div></div>
-      <input id="mm-d${i}" placeholder="o que comeu (opcional)" style="margin-top:.4rem">
-      <button class="btn small" id="mm-s${i}" style="margin-top:.5rem">Salvar</button>`;
-    cont.querySelector('#mm-s'+i).onclick=()=>{
-      const p=+cont.querySelector('#mm-p'+i).value||0,c=+cont.querySelector('#mm-c'+i).value||0,f=+cont.querySelector('#mm-f'+i).value||0;
-      salvarRefeicao(a,date,slots,i,{p,c,f,kcal:Math.round(p*4+c*4+f*9),desc:cont.querySelector('#mm-d'+i).value.trim()});
-    };
-  });
-  body.querySelectorAll('[data-undo]').forEach(bt=> bt.onclick=()=>{
-    const i=+bt.dataset.undo; a.dias[date][i]=null; store.upsert(a); renderAluno(a.id,'dia');
-  });
-  body.querySelector('#reset-dia').onclick=()=>{ if(confirm('Zerar os registros de hoje?')){ delete a.dias[date]; delete diaSel[date]; store.upsert(a); renderAluno(a.id,'dia'); } };
-}
-function salvarRefeicao(a,date,slots,i,rec){
-  a.dias=a.dias||{}; if(!a.dias[date]) a.dias[date]=slots.map(()=>null);
-  a.dias[date][i]=rec; store.upsert(a); renderAluno(a.id,'dia');
+  slots.forEach((s,i)=>{ if(log[i])return; const cid='dia_'+a.id+'_'+date+'_'+i;
+    const alvo={p:restante.p*s.dist/pesoPend,c:restante.c*s.dist/pesoPend,f:restante.f*s.dist/pesoPend,kcal:restante.kcal*s.dist/pesoPend};
+    renderComposer(body.querySelector('#host-'+cid), a, cid, s.slot, alvo, {logBtn:true, onLog:(tot,foods)=>{
+      const desc=foods.map(x=>{ const fo=foodByName(x.nome), ui=unitInfo(fo); return ui?`${x.nome} (${Math.round(x.grams/ui.un)}×, ${x.grams}g)`:`${x.nome} ${x.grams}g`; }).join(', ');
+      salvarRefeicao(a,date,slots,i,{p:tot.p,c:tot.c,f:tot.f,kcal:tot.kcal,desc});
+    }}); });
+  body.querySelectorAll('[data-undo]').forEach(bt=> bt.onclick=()=>{ const i=+bt.dataset.undo; a.dias[date][i]=null; store.upsert(a); renderAluno(a.id,'dia'); });
+  body.querySelector('#reset-dia').onclick=()=>{ if(confirm('Zerar os registros de hoje?')){ delete a.dias[date]; store.upsert(a); renderAluno(a.id,'dia'); } };
 }
 
 // última sessão registrada de um exercício (para prefill)
