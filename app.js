@@ -652,24 +652,56 @@ const UNITS={
   'Ovo inteiro':{un:50,nome:'ovo'}, 'Clara de ovo':{un:33,nome:'clara'},
   'Pão francês':{un:50,nome:'pão'}, 'Pão integral':{un:25,nome:'fatia'},
   'Banana':{un:100,nome:'unid.'}, 'Maçã':{un:130,nome:'unid.'}, 'Mamão':{un:150,nome:'fatia'},
-  'Laranja':{un:130,nome:'unid.'}, 'Abacaxi':{un:100,nome:'fatia'}, 'Uva':{un:100,nome:'punhado'}
+  'Laranja':{un:130,nome:'unid.'}, 'Abacaxi':{un:100,nome:'fatia'}, 'Uva':{un:100,nome:'punhado'},
+  'Leite integral':{un:200,nome:'copo'}, 'Leite desnatado':{un:200,nome:'copo'}
 };
+const LIQUIDOS=new Set(['Leite integral','Leite desnatado']); // exibir em ml
 const foodByName = n => getFoods().find(f=>f.nome===n);
 const unitInfo   = fo => fo?UNITS[fo.nome]||null:null;
-const roleDe = fo => fo.cat==='prot'?'p':(fo.cat==='carb'||fo.cat==='fruta')?'c':fo.cat==='gord'?'f':'veg';
 
-// sugere gramas para bater os macros, com vários alimentos por macro (divide igual)
+// classificação para a sugestão: âncora (ajusta pra bater a meta) x acompanhamento (porção fixa)
+const OLEOS=['Azeite de oliva','Óleo de coco'];
+const LEGUMES=['Feijão carioca cozido','Feijão preto cozido','Lentilha cozida','Grão-de-bico cozido','Edamame'];
+const OLEAGINOSAS=['Castanha-do-pará','Amêndoas','Amendoim','Pasta de amendoim','Abacate','Chia','Linhaça'];
+const LATICINIOS=['Leite integral','Leite desnatado','Iogurte natural integral','Iogurte grego natural','Queijo cottage','Queijo minas frescal','Requeijão light'];
+// âncora = ajusta para bater a meta (proteína magra, whey, carbo staple, óleo).
+// acompanhamento = porção fixa realista (vegetal, fruta, legume, oleaginosa, laticínio, ovo inteiro).
+function classify(fo){
+  const role = fo.cat==='prot'?'P':(fo.cat==='carb'||fo.cat==='fruta')?'C':fo.cat==='gord'?'F':'V';
+  const side = fo.cat==='veg' || fo.cat==='fruta' || LEGUMES.includes(fo.nome) || OLEAGINOSAS.includes(fo.nome)
+    || LATICINIOS.includes(fo.nome) || fo.nome==='Ovo inteiro';
+  return {role, side, anchor:!side};
+}
+function porcaoAcompanhamento(fo){
+  const ui=unitInfo(fo);
+  if(fo.nome==='Ovo inteiro') return 100;                       // ~2 ovos
+  if(['Leite integral','Leite desnatado'].includes(fo.nome)) return 200;   // 1 copo
+  if(['Iogurte natural integral','Iogurte grego natural'].includes(fo.nome)) return 170;
+  if(fo.nome==='Queijo cottage') return 100;
+  if(fo.nome==='Queijo minas frescal') return 40;
+  if(fo.nome==='Requeijão light') return 15;
+  if(fo.cat==='fruta') return ui?ui.un:100;
+  if(fo.cat==='veg') return 100;
+  if(LEGUMES.includes(fo.nome)) return 130;
+  if(fo.nome==='Abacate') return 50;
+  if(fo.nome==='Pasta de amendoim') return 15;
+  if(['Chia','Linhaça'].includes(fo.nome)) return 15;
+  return 20; // castanhas, amêndoas, amendoim
+}
+// sugere gramas: acompanhamentos ganham porção normal; âncoras (proteína magra, carbo staple, óleo) ajustam pra bater a meta
 function solverMulti(foods, target){
-  const info=foods.map(it=>({it, fo:foodByName(it.nome)})).filter(x=>x.fo);
-  info.forEach(x=>{ x.role=roleDe(x.fo); if(x.role==='veg') x.it.grams=100; else if(!x.it.grams) x.it.grams=50; });
-  const per=(fo,m)=>(m==='p'?fo.p:m==='c'?fo.c:fo.f)/100;
-  for(let iter=0;iter<10;iter++){
-    ['p','c','f'].forEach(M=>{
-      const grp=info.filter(x=>x.role===M); if(!grp.length) return;
-      let others=0; info.forEach(x=>{ if(x.role!==M) others+=x.it.grams*per(x.fo,M); });
-      const alvo=(M==='p'?target.p:M==='c'?target.c:target.f);
-      const share=Math.max(0, alvo-others)/grp.length;
-      grp.forEach(x=>{ const pg=per(x.fo,M); x.it.grams = pg>0? share/pg : 0; });
+  const info=foods.map(it=>({it, fo:foodByName(it.nome)})).filter(x=>x.fo).map(x=>Object.assign(x, classify(x.fo)));
+  info.forEach(x=>{ if(x.side) x.it.grams=porcaoAcompanhamento(x.fo); });
+  const per=(fo,m)=>(m==='P'?fo.p:m==='C'?fo.c:fo.f)/100;
+  const ancoras=M=>{ let a=info.filter(x=>x.role===M && x.anchor); if(!a.length) a=info.filter(x=>x.role===M); return a; };
+  for(let iter=0;iter<12;iter++){
+    ['P','C','F'].forEach(M=>{
+      const grp=ancoras(M); if(!grp.length) return;
+      const set=new Set(grp.map(x=>x.it));
+      let outros=0; info.forEach(x=>{ if(!set.has(x.it)) outros+=x.it.grams*per(x.fo,M); });
+      const alvo=(M==='P'?target.p:M==='C'?target.c:target.f);
+      const share=Math.max(0, alvo-outros)/grp.length;
+      grp.forEach(x=>{ const pg=per(x.fo,M); if(pg>0) x.it.grams=share/pg; });
     });
   }
   info.forEach(x=>{ const ui=unitInfo(x.fo);
@@ -686,12 +718,12 @@ function renderComposer(host, a, cid, slot, target, opts){
   const catPt={prot:'proteína',carb:'carbo',fruta:'fruta',gord:'gordura',veg:'vegetal'};
   const rows=st.foods.map((it,idx)=>{
     const fo=foodByName(it.nome); if(!fo) return '';
-    const ui=unitInfo(fo); const g=it.grams/100;
+    const ui=unitInfo(fo); const g=it.grams/100; const un=LIQUIDOS.has(it.nome)?'ml':'g';
     const val= ui? +(it.grams/ui.un).toFixed(1) : it.grams;
     return `<tr>
       <td>${esc(it.nome)}<div class="sub">${Math.round(fo.p*g)}P ${Math.round(fo.c*g)}C ${Math.round(fo.f*g)}G · ${Math.round(fo.kcal*g)} kcal</div></td>
       <td style="width:88px"><input type="number" step="${ui?0.5:5}" min="0" data-qty="${idx}" value="${val}" style="padding:.4rem"></td>
-      <td class="sub" style="width:70px">${ui?ui.nome+`<div class="sub">${it.grams} g</div>`:'g'}</td>
+      <td class="sub" style="width:70px">${ui?ui.nome+`<div class="sub">${it.grams} ${un}</div>`:un}</td>
       <td style="width:30px"><button class="linkbtn" data-rm="${idx}">✕</button></td></tr>`;
   }).join('');
   const grupos={prot:[],carb:[],fruta:[],gord:[],veg:[]};
