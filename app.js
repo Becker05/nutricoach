@@ -329,7 +329,7 @@ function gerarPlanoTreino(a){
   const lesoes = a.anamnese.lesoes || [];
   const minutos = Math.max(20, Math.min(120, a.anamnese.minutosTreino||60));
   const capExercicio = {iniciante:3, intermediario:4, avancado:5}[exp]; // teto de séries por exercício
-  const capSemanal = 20; // teto de séries por grupo por semana, pra não virar volume-lixo
+  const capSemanal = {iniciante:12, intermediario:16, avancado:20}[exp]; // teto de séries/grupo/semana pela 05-treino, evita superdosar
   const repScheme = a.objetivo==='hipertrofia' ? '8–12 reps' : a.objetivo==='emagrecimento' ? '10–15 reps' : '6–10 reps';
   const rir = exp==='iniciante' ? 'RIR 3 (deixe 3 na reserva)' : exp==='avancado' ? 'RIR 1–2' : 'RIR 2–3';
   // descanso por objetivo e tipo
@@ -351,9 +351,9 @@ function gerarPlanoTreino(a){
   const splits = {
     2:[['peito','costas','ombro','biceps','triceps','abdomen'],['quadriceps','posterior','gluteo','panturrilha','abdomen']],
     3:[['peito','ombro','triceps'],['costas','biceps'],['quadriceps','posterior','gluteo','panturrilha']],
-    4:[['peito','triceps'],['costas','biceps'],['ombro','abdomen'],['quadriceps','posterior','gluteo','panturrilha']],
-    5:[['peito','triceps'],['costas','biceps'],['ombro','abdomen'],['quadriceps','panturrilha'],['posterior','gluteo']],
-    6:[['peito','triceps'],['costas','biceps'],['quadriceps','panturrilha'],['ombro','abdomen'],['posterior','gluteo'],['peito','costas']]
+    4:[['peito','costas','ombro','triceps','biceps'],['quadriceps','posterior','gluteo','panturrilha'],['peito','costas','ombro','biceps','triceps','abdomen'],['quadriceps','posterior','gluteo','panturrilha']],
+    5:[['peito','costas','ombro','biceps','triceps'],['quadriceps','posterior','gluteo','panturrilha'],['peito','ombro','triceps','abdomen'],['costas','biceps','abdomen'],['quadriceps','posterior','gluteo','panturrilha']],
+    6:[['peito','ombro','triceps'],['costas','biceps'],['quadriceps','posterior','gluteo','panturrilha'],['peito','ombro','triceps','abdomen'],['costas','biceps','abdomen'],['quadriceps','posterior','gluteo','panturrilha']]
   };
   const eqOk = ex => local==='academia' ? ex.eq.includes('academia')
     : local==='casa_halter' ? (ex.eq.includes('casa')||ex.eq.includes('casa_halter'))
@@ -370,22 +370,32 @@ function gerarPlanoTreino(a){
     const tempo = () => exs.reduce((s,e)=>s+e.series*minPorSerie(e.comp),0);
     const volGrupo = gr => exs.filter(e=>e.grupo===gr).reduce((s,e)=>s+e.series,0);
     const cabeSemana = gr => (volSemana[gr]||0)+volGrupo(gr) < capSemanal;
-    // preenche o tempo: primeiro amplia exercícios (largura), depois séries (profundidade)
+    const maxExSessao = Math.max(4, Math.min(9, Math.round(minutos/9))); // ~1 exercício a cada 9 min; 60min≈7, 90min≈9
+    // preenche o tempo: 1) leva as séries a um piso de 3, 2) adiciona exercícios até o teto da sessão, 3) aprofunda séries até o teto
     let guard=0;
-    while(tempo() < orcamento && guard++ < 300){
+    while(tempo() < orcamento && guard++ < 400){
       let mexeu=false;
-      for(const gr of grupos){
-        const usados = exs.filter(e=>e.grupo===gr).length;
-        const prox = pool[gr][usados];
-        if(usados < maxExGrupo(gr) && prox && cabeSemana(gr)){
-          const novo={exercicio:prox.n, grupo:gr, comp:!!prox.comp, series:2};
-          if(tempo()+novo.series*minPorSerie(novo.comp) <= orcamento){ exs.push(novo); mexeu=true; break; }
+      // 1) piso de 3 séries por exercício antes de espalhar
+      for(const e of exs){
+        if(e.series >= 3 || e.series >= capExercicio || !cabeSemana(e.grupo)) continue;
+        if(tempo()+minPorSerie(e.comp) <= orcamento){ e.series++; mexeu=true; break; }
+      }
+      if(mexeu) continue;
+      // 2) largura: novo exercício, respeitando o teto de exercícios da sessão
+      if(exs.length < maxExSessao){
+        for(const gr of grupos){
+          const usados = exs.filter(e=>e.grupo===gr).length;
+          const prox = pool[gr][usados];
+          if(usados < maxExGrupo(gr) && prox && cabeSemana(gr)){
+            const novo={exercicio:prox.n, grupo:gr, comp:!!prox.comp, series:2};
+            if(tempo()+novo.series*minPorSerie(novo.comp) <= orcamento){ exs.push(novo); mexeu=true; break; }
+          }
         }
       }
       if(mexeu) continue;
+      // 3) profundidade: sobe séries até o teto por exercício
       for(const e of exs){
-        if(e.series >= capExercicio) continue;
-        if(!cabeSemana(e.grupo)) continue;
+        if(e.series >= capExercicio || !cabeSemana(e.grupo)) continue;
         if(tempo()+minPorSerie(e.comp) <= orcamento){ e.series++; mexeu=true; break; }
       }
       if(!mexeu) break; // nada mais cabe ou os tetos foram atingidos
